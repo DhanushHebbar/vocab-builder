@@ -175,20 +175,4 @@ const StatsCard: React.FC<StatsCardProps> = ({ title, value, icon, trend }) => (
   </motion.div>
 );
 
-// Ripple Button Component
-import './RippleButton.css';
 
-const RippleButton: React.FC = () => {
-  return (
-    <a 
-      href="https://vocab-builder-swart.vercel.app/" 
-      target="_blank" 
-      className="ripple-button" 
-      aria-label="Try this Vocabulary App"
-    >
-      <span>🚀 Try This App</span>
-    </a>
-  );
-};
-
-export default RippleButton;
