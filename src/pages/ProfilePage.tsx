@@ -274,3 +274,16 @@ const Activity: React.FC<ActivityProps> = ({ title, value, icon }) => (
 );
 
 export default ProfilePage;
+
+import React from 'react';
+import './RippleButton.css';
+
+const RippleButton: React.FC = () => {
+  return (
+    <a href="https://vocab-builder-swart.vercel.app/" target="_blank" className="ripple-button">
+      <span>🚀 Try This App</span>
+    </a>
+  );
+};
+
+export default RippleButton;
