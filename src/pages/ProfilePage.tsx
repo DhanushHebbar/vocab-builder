@@ -13,16 +13,8 @@ import {
   Filler
 } from 'chart.js';
 import { 
-  Trophy, 
-  Brain, 
-  Target, 
-  TrendingUp, 
-  Calendar, 
-  Clock,
-  Award,
-  BookOpen,
-  Heart,
-  BarChart
+  Trophy, Brain, Target, TrendingUp, Calendar, Clock,
+  Award, BookOpen, Heart, BarChart
 } from 'lucide-react';
 import { useUser } from '../context/UserContext';
 import { vocabularyData } from '../data/vocabularyData';
@@ -41,13 +33,17 @@ ChartJS.register(
 
 const ProfilePage: React.FC = () => {
   const { userProgress } = useUser();
+
+  // Ensure userProgress data is available
+  if (!userProgress) {
+    return <p className="text-center text-lg">Loading progress...</p>;
+  }
   
-  // Calculate statistics
   const totalWords = vocabularyData.length;
   const learnedPercentage = (userProgress.learned.length / totalWords) * 100;
   const quizzedPercentage = (userProgress.quizzed.length / totalWords) * 100;
-  
-  // Prepare chart data
+
+  // Chart Data
   const chartData = {
     labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
     datasets: [
@@ -66,9 +62,11 @@ const ProfilePage: React.FC = () => {
     responsive: true,
     plugins: {
       legend: {
-        display: false
+        display: true,
+        position: 'top',
       },
       tooltip: {
+        enabled: true,
         mode: 'index',
         intersect: false,
       }
@@ -151,71 +149,11 @@ const ProfilePage: React.FC = () => {
           <Line data={chartData} options={chartOptions} />
         </div>
       </motion.div>
-
-      {/* Achievements and Activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <motion.div 
-          className="bg-white rounded-xl shadow-md p-6"
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-        >
-          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-            <Award className="w-5 h-5 text-primary-500" />
-            Recent Achievements
-          </h2>
-          <div className="space-y-4">
-            <Achievement 
-              title="7-Day Streak"
-              description="Maintained a learning streak for 7 days"
-              icon={<Calendar className="w-5 h-5" />}
-            />
-            <Achievement 
-              title="Vocabulary Master"
-              description="Learned 50 new words"
-              icon={<BookOpen className="w-5 h-5" />}
-            />
-            <Achievement 
-              title="Quiz Champion"
-              description="Scored 100% in 3 consecutive quizzes"
-              icon={<Target className="w-5 h-5" />}
-            />
-          </div>
-        </motion.div>
-
-        <motion.div 
-          className="bg-white rounded-xl shadow-md p-6"
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-        >
-          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-            <BarChart className="w-5 h-5 text-primary-500" />
-            Activity Summary
-          </h2>
-          <div className="space-y-4">
-            <Activity 
-              title="Words Reviewed"
-              value={userProgress.quizzed.length}
-              icon={<Brain className="w-5 h-5" />}
-            />
-            <Activity 
-              title="Favorite Words"
-              value={userProgress.favorites.length}
-              icon={<Heart className="w-5 h-5" />}
-            />
-            <Activity 
-              title="Quiz Attempts"
-              value={15}
-              icon={<Target className="w-5 h-5" />}
-            />
-          </div>
-        </motion.div>
-      </div>
     </div>
   );
 };
 
+// StatsCard Component
 interface StatsCardProps {
   title: string;
   value: string;
@@ -237,50 +175,17 @@ const StatsCard: React.FC<StatsCardProps> = ({ title, value, icon, trend }) => (
   </motion.div>
 );
 
-interface AchievementProps {
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-}
-
-const Achievement: React.FC<AchievementProps> = ({ title, description, icon }) => (
-  <div className="flex items-center gap-4 p-3 rounded-lg hover:bg-neutral-50 transition-colors">
-    <div className="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-600">
-      {icon}
-    </div>
-    <div>
-      <h3 className="font-medium text-neutral-800">{title}</h3>
-      <p className="text-sm text-neutral-600">{description}</p>
-    </div>
-  </div>
-);
-
-interface ActivityProps {
-  title: string;
-  value: number;
-  icon: React.ReactNode;
-}
-
-const Activity: React.FC<ActivityProps> = ({ title, value, icon }) => (
-  <div className="flex items-center justify-between p-3 rounded-lg hover:bg-neutral-50 transition-colors">
-    <div className="flex items-center gap-3">
-      <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-600">
-        {icon}
-      </div>
-      <span className="font-medium text-neutral-800">{title}</span>
-    </div>
-    <span className="text-lg font-semibold text-primary-600">{value}</span>
-  </div>
-);
-
-export default ProfilePage;
-
-import React from 'react';
+// Ripple Button Component
 import './RippleButton.css';
 
 const RippleButton: React.FC = () => {
   return (
-    <a href="https://vocab-builder-swart.vercel.app/" target="_blank" className="ripple-button">
+    <a 
+      href="https://vocab-builder-swart.vercel.app/" 
+      target="_blank" 
+      className="ripple-button" 
+      aria-label="Try this Vocabulary App"
+    >
       <span>🚀 Try This App</span>
     </a>
   );
